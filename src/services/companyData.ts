@@ -8,10 +8,10 @@ export type CompanyData = {
 
 export function getCompanyData() : CompanyData {
   return {
-    name: "Delicious Eats",
+    name: "Halo Ramen",
     image: "/banner.png",
-    contact: "123-456-7890",
-    location: "123 Food Street, Flavor Town",
-    description: "Serving the best dishes from around the world.",
+    contact: "018-3862118",
+    location: "Lot G25A, Ground Floor, AEON Alpha Angle Shopping Centre, Jalan R1, Seksyen 1, 53300, Federal Territory of Kuala Lumpur",
+    description: "Serving the japanese cuisines from around the world.",
   };
 }

@@ -1,4 +1,4 @@
-import { Row, Col, Typography } from "antd";
+import { Row, Col, Typography, Divider } from "antd";
 import { CompanyData, getCompanyData } from "../services/companyData";
 import { Food, getFoods } from "../services/foodData";
 import "./css/Ordering.css";
@@ -11,21 +11,22 @@ export default function Ordering() {
 
   return (
     <div className="container">
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
+      <Row gutter={16} id="company-hero">
+        <Col xs={24} md={12} id="banner-container">
           <img id="banner" src={restaurantInfo.image} alt={restaurantInfo.name} />
         </Col>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} id="company-info">
           <Title level={2}>{restaurantInfo.name}</Title>
           <Paragraph>
-            <strong>Contact:</strong> {restaurantInfo.contact}
+            <strong>Contact :</strong> {restaurantInfo.contact}
           </Paragraph>
           <Paragraph>
-            <strong>Location:</strong> {restaurantInfo.location}
+            <strong>Location :</strong> {restaurantInfo.location}
           </Paragraph>
           <Paragraph>{restaurantInfo.description}</Paragraph>
         </Col>
       </Row>
+      
       <Row gutter={[24, 18]} style={{ marginTop: 16 }}>
         {foods.map((item) => {
           return (

@@ -23,10 +23,8 @@ body {
   min-height: 100%;
   width: 100%;
   max-width: 1000px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 16px;
-  padding-left: 16px;
+  margin-inline: auto;
+  padding-inline: 16px;
   background-color: white;
   box-sizing: inherit;
   box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.08);
@@ -37,10 +35,4 @@ img {
   font-style: italic;
 }
 
-#banner {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 8px;
-}
+
