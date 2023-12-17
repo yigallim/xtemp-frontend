@@ -8,26 +8,39 @@
   object-fit: cover;
   object-position: center;
   border-radius: 8px;
-  box-shadow: 1px 4px 12px 6px rgba(0, 0, 0, 0.15);
 }
 
-#company-info {
-    padding-top: 1rem;
+#company-info > div {
+  box-sizing: border-box;
+  padding-inline: 1rem !important;
+  padding-top: 1rem;
+  background-color: rgb(249, 251, 253);
+  border: 0.8px solid rgb(215, 220, 225);
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
 }
 
 @media only screen and (max-width: 767px) {
   #company-hero {
     padding-top: 0rem;
+    margin-inline: 0 !important;
   }
 
   #banner-container {
     padding: 0 !important;
-    left: -8px;
-    min-width: calc(100% + 16px);
+    left: -18px;
+    min-width: calc(100% + 36px);
   }
 
   #banner {
     border-radius: 0;
+  }
+
+  #company-info {
+    margin-top: 0.75rem;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
   }
 }
 
@@ -35,8 +48,8 @@
   display: flex !important;
   height: 100%;
   overflow: hidden;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  padding-bottom: 4px;
+  border-bottom: 0.8px solid rgb(215, 220, 225);
+  padding-block: 0.5rem 0.2rem;
 }
 
 .food-item img {
@@ -56,7 +69,7 @@
 
 .food-item .food-main {
   flex: 1;
-  padding-inline: 0.5em;
+  padding-inline: 0.75em 0.5em;
 }
 
 .food-item .food-main p.food-title {
@@ -67,7 +80,7 @@
 }
 
 .food-item .food-main p.food-description {
-  color: rgba(0, 0, 0, 0.7);
+  color: rgb(106, 111, 115);
 }
 
 @media only screen and (max-width: 575px) {
