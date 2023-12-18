@@ -1,5 +1,6 @@
 #company-hero {
   padding-block: 0.75rem;
+  margin: 0 !important;
 }
 
 #banner {
@@ -22,15 +23,13 @@
 }
 
 @media only screen and (max-width: 767px) {
-  #company-hero {
-    padding-top: 0rem;
-    margin-inline: 0 !important;
-  }
-
   #banner-container {
     padding: 0 !important;
-    left: -18px;
-    min-width: calc(100% + 36px);
+  }
+
+  #company-hero {
+    padding-top: 0rem;
+    margin: 0 !important;
   }
 
   #banner {
@@ -39,9 +38,29 @@
 
   #company-info {
     margin-top: 0.75rem;
-    margin-inline: 0 !important;
-    padding-inline: 0 !important;
+    padding-inline: 18px !important;
   }
+}
+
+/* NAVIFATION SECTION */
+#navigation {
+  backdrop-filter: saturate(1.8) blur(16px);
+  top: 0;
+  z-index: 999;
+  padding-top: 12px;
+  padding-inline: 18px;
+  position: sticky;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+#navigation > div {
+  border-bottom: 0.8px solid rgb(229, 231, 235);
+}
+
+/* MENU SECTION */
+#menu {
+  padding-top: 24px;
+  padding-inline: 18px;
 }
 
 .food-item {
@@ -50,6 +69,7 @@
   overflow: hidden;
   border-bottom: 0.8px solid rgb(215, 220, 225);
   padding-block: 0.5rem 0.2rem;
+  cursor: pointer;
 }
 
 .food-item img {
@@ -94,4 +114,71 @@
   padding-right: 0.25em;
   font-weight: 600;
   font-size: 15px;
+}
+
+#bottom-bar {
+  display: flex;
+  align-items: stretch;
+  z-index: 1000;
+  position: sticky;
+  bottom: -0;
+  border-top: 0.8px solid rgb(215, 220, 225);
+  background-color: rgb(255, 255, 255);
+}
+
+.seat-button {
+  padding: 0.75em !important;
+  height: auto !important;
+  width: 60px !important;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(249, 251, 253);;
+  border: 0.8px solid rgb(215, 220, 225);
+}
+
+.table-no {
+  font-size: 16px;
+  margin-left: 0.5em;
+}
+
+.cart-line {
+  background-color: var(--primary-color);
+  height: 100%;
+  border-radius: 6px 30px 30px 6px;
+  padding-inline: 1em 0.5em;
+  margin-left: 0.5em;
+}
+
+.cart-line > *:last-child {
+  background-color: black;
+  color: white;
+  padding: 0.5em;
+  border-radius: 50%;
+}
+
+.cart-price {
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 767px) {
+  .seat-button {
+    width: 45px !important;
+  }
+
+  .table-no {
+    font-size: 16px;
+    letter-spacing: -1px;
+    margin-left: 0;
+  }
+
+  .cart-line {
+    margin-left: 0;
+  }
+
+  .cart-price {
+    font-size: 14px;
+  }
+  
 }
