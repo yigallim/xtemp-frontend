@@ -61,6 +61,7 @@
 #menu {
   padding-top: 24px;
   padding-inline: 18px;
+  flex: 1;
 }
 
 .food-item {
@@ -149,6 +150,7 @@
   border-radius: 6px 30px 30px 6px;
   padding-inline: 1em 0.5em;
   margin-left: 0.5em;
+  cursor: pointer;
 }
 
 .cart-line > *:last-child {
