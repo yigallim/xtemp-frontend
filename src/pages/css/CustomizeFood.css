@@ -1,0 +1,27 @@
+
+
+@media only screen and (max-width: 767px) {
+  .customize-section-md {
+    padding-inline: 24px !important;
+  }
+
+  #food-hero {
+    max-height: 250px;
+  }
+
+  #food-info > .food-main {
+    border: none;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    margin-top: 12px;
+  }
+
+  .food-description {
+    color: rgb(106, 111, 115);
+  }
+}
+
+.customize-base-price {
+    color: var(--primary-color) !important;
+}

@@ -1,4 +1,5 @@
-#company-hero {
+#company-hero,
+#food-hero {
   padding-block: 0.75rem;
   margin: 0 !important;
 }
@@ -11,9 +12,10 @@
   border-radius: 8px;
 }
 
-#company-info > div {
+#company-info > div,
+#food-info > div {
   box-sizing: border-box;
-  padding-inline: 1rem !important;
+  padding-inline: 1rem;
   padding-top: 1rem;
   background-color: rgb(249, 251, 253);
   border: 0.8px solid rgb(215, 220, 225);
@@ -27,7 +29,8 @@
     padding: 0 !important;
   }
 
-  #company-hero {
+  #company-hero,
+  #food-hero {
     padding-top: 0rem;
     margin: 0 !important;
   }
@@ -93,19 +96,12 @@
   padding-inline: 0.75em 0.5em;
 }
 
-.food-item .food-main p.food-title {
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.3em;
-  margin-block: 0.15em 0.25em;
-}
-
-.food-item .food-main p.food-description {
+.food-item .food-main .food-description {
   color: rgb(106, 111, 115);
 }
 
 @media only screen and (max-width: 575px) {
-  .food-item .food-main p.food-description {
+  .food-item .food-main .food-description {
     font-size: 13px;
   }
 }
@@ -135,7 +131,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(249, 251, 253);;
+  background: rgb(249, 251, 253);
   border: 0.8px solid rgb(215, 220, 225);
 }
 
@@ -182,5 +178,4 @@
   .cart-price {
     font-size: 14px;
   }
-  
 }

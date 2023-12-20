@@ -1,24 +1,22 @@
-import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Divider, Flex, Form, Select, notification } from "antd";
+import { Button, Card, Divider, Flex, Form, notification } from "antd";
 import { getRetailSeats, getRetailData } from "../services/companyData";
 import Meta from "antd/es/card/Meta";
+import SelectSeatInput from "../components/SelectSeatInput";
+import { useState } from "react";
 
 export default function SelectTable() {
   const [api, contextHolder] = notification.useNotification({
     stack: { threshold: 2 },
     maxCount: 3,
-    top: 16
+    top: 16,
   });
   const navigate = useNavigate();
-
-  const seats = useMemo(() => {
-    return getRetailSeats().map((seat) => ({ value: seat, label: seat }));
-  }, []);
-
   const retailData = getRetailData();
+  const [selectedSeat, setSelectedSeat] = useState<string>("");
 
-  const handleFormSubmit = ({ selectedSeat }: { selectedSeat: string }) => {
+  const handleFormSubmit = () => {
+    console.log(selectedSeat);
     if (getRetailSeats().includes(selectedSeat)) {
       navigate(`/order-${selectedSeat}`);
     } else {
@@ -48,13 +46,7 @@ export default function SelectTable() {
           <Divider />
           <Form onFinish={handleFormSubmit}>
             <Form.Item name="selectedSeat">
-              <Select
-                showSearch
-                style={{ width: "100%" }}
-                placeholder="Search to Select"
-                optionFilterProp="children"
-                options={seats}
-              />
+              <SelectSeatInput value={selectedSeat} onChange={(value) => setSelectedSeat(value)} />
             </Form.Item>
             <Form.Item style={{ marginBottom: 0 }}>
               <Button type="primary" htmlType="submit">

@@ -1,9 +1,16 @@
 import { SettingOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Flex, Typography } from "antd";
+import { useParams } from "react-router-dom";
 
 const { Text } = Typography;
 
-export default function Footer() {
+type FooterProps = {
+  onChangeSeat: () => void;
+};
+
+export default function Footer({ onChangeSeat }: FooterProps) {
+  const { seatId } = useParams();
+
   return (
     <footer id="bottom-bar">
       <Flex
@@ -15,13 +22,14 @@ export default function Footer() {
           className="seat-button"
           type="text"
           icon={<SettingOutlined style={{ fontSize: 20 }} />}
+          onClick={onChangeSeat}
         ></Button>
         <Flex vertical>
           <Text className="table-no" keyboard>
             Table No.
           </Text>
           <Text className="table-no" keyboard>
-            101
+            {seatId?.split("order-")[1]!}
           </Text>
         </Flex>
         <Flex className="cart-line" flex={1} align="center" justify="space-between">

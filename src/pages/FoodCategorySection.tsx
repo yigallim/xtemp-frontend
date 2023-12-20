@@ -1,6 +1,6 @@
 import { Row, Col, Typography } from "antd";
 import { Food } from "../services/foodData";
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 type FoodCategorySectionProps = {
   categoryName: string;
@@ -27,10 +27,10 @@ export default function FoodCategorySection({
               <div className="food-item" onClick={() => onFoodItemClick(item.id)}>
                 <img alt={item.name} src={item.src} />
                 <div className="food-main">
-                  <p className="food-title">
+                  <Title level={5} style={{ marginBottom: "0.25em" }} className="food-title">
                     {item.id}. {item.name}
-                  </p>
-                  <p className="food-description">{item.description}</p>
+                  </Title>
+                  <Text className="food-description">{item.description}</Text>
                 </div>
                 <div className="food-price">{item.price.toFixed(2)}</div>
               </div>

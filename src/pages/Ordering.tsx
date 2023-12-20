@@ -1,24 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Row, Col, Typography, Anchor, Empty } from "antd";
-import { Input } from "antd";
-const { Search } = Input;
+import { useNavigate, useParams } from "react-router-dom";
+import { Row, Col, Typography, Anchor, Empty, Input } from "antd";
 import { RetailData, getRetailData, getRetailSeats } from "../services/companyData";
 import { Food, getFoods, FoodCategory, getFoodCategories } from "../services/foodData";
-import "./css/Ordering.css";
-import { useNavigate, useParams } from "react-router-dom";
-import Footer from "./Footer";
+import Footer from "../components/Footer";
 import FoodCategorySection from "./FoodCategorySection";
+import "./css/Ordering.css";
+import ChangeSeat from "../components/ChangeSeat";
 
 const { Title, Paragraph } = Typography;
+const { Search } = Input;
 
 export default function Ordering() {
+  const navigate = useNavigate();
   const { seatId } = useParams();
   const seats = getRetailSeats();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!seats.includes(seatId?.split("order-")[1]!)) navigate("/");
-  }, [seatId, seats, navigate]);
+    if (!seats.includes(seatId?.split("order-")[1]!)) navigate("/not-found", { replace: true });
+  }, [seatId, seats]);
 
   const restaurantInfo: RetailData = getRetailData();
   const foods: Food[] = getFoods();
@@ -26,6 +26,7 @@ export default function Ordering() {
   const topRef = useRef<HTMLDivElement>(null);
   const [targetOffset, setTargetOffset] = useState<number>();
   const [filteredFoods, setFilteredFoods] = useState<Food[]>(foods);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setTargetOffset(topRef.current?.clientHeight);
@@ -71,6 +72,19 @@ export default function Ordering() {
     }
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = (targetSeat: string) => {
+    navigate(`/order-${targetSeat}`, { replace: true });
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="container flex-container">
       <Row gutter={24} id="company-hero">
@@ -104,7 +118,11 @@ export default function Ordering() {
 
       <section id="menu">
         {filteredFoods.length === 0 ? (
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No Food Record." />
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="No Food Record."
+            style={{ minHeight: 200, paddingTop: 30 }}
+          />
         ) : (
           Object.keys(groupedFoods).map((key) => {
             const categoryId = categories.find((category) => category.name === key)?.id;
@@ -120,8 +138,10 @@ export default function Ordering() {
           })
         )}
       </section>
-      
-      <Footer />
+
+      <Footer onChangeSeat={showModal} />
+
+      <ChangeSeat isOpen={isModalOpen} onOk={handleOk} onCancel={handleCancel} />
     </div>
   );
 }

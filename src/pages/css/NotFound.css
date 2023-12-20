@@ -1,0 +1,20 @@
+.not-found-container {
+  height: 90%;
+  margin-inline: 36px;
+  place-items: center;
+  display: grid;
+}
+
+#msg-404 {
+  font-size: 10em;
+}
+
+.not-found-msg {
+  max-width: 300px;
+}
+
+@media (max-width: 768px) {
+  #msg-404 {
+    font-size: 8em;
+  }
+}
