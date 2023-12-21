@@ -1,26 +1,29 @@
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Divider, Flex, Form, notification } from "antd";
+import { Button, Card, Divider, Flex, Form } from "antd";
 import { getRetailSeats, getRetailData } from "../services/companyData";
 import Meta from "antd/es/card/Meta";
 import SelectSeatInput from "../components/SelectSeatInput";
-import { useState } from "react";
+import NotificationContext from "../context/NotificationContext";
 
 export default function SelectTable() {
-  const [api, contextHolder] = notification.useNotification({
-    stack: { threshold: 1 },
-    maxCount: 3,
-    top: 16,
-  });
   const navigate = useNavigate();
   const retailData = getRetailData();
   const [selectedSeat, setSelectedSeat] = useState<string>("");
+  const api = useContext(NotificationContext);
 
   const handleFormSubmit = () => {
     console.log(selectedSeat);
     if (getRetailSeats().includes(selectedSeat)) {
       navigate(`/order-${selectedSeat}`);
+      api!.success({
+        message: "Seat Selected Successfully",
+        description: `You have selected table ${selectedSeat}. Enjoy your meal!`,
+        duration: 2.5,
+        placement: "top",
+      });
     } else {
-      api.warning({
+      api!.warning({
         message: "Warning",
         description: "Please select a proper table number.",
         duration: 2.5,
@@ -31,7 +34,6 @@ export default function SelectTable() {
 
   return (
     <>
-      {contextHolder}
       <Flex
         align="center"
         justify="center"

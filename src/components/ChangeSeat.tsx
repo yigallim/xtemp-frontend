@@ -20,8 +20,6 @@ export default function ChangeSeat({ isOpen, onOk, onCancel }: ChangeSeatProps) 
       title="Change Seat"
       open={isOpen}
       onOk={() => {
-        onOk(selectedSeat);
-        console.log(selectedSeat, seatId);
         if (seatId?.split("order-")[1]! == selectedSeat)
           api!.warning({
             message: "No Change Detected",
@@ -29,13 +27,15 @@ export default function ChangeSeat({ isOpen, onOk, onCancel }: ChangeSeatProps) 
             duration: 3,
             placement: "top",
           });
-        else
+        else {
+          onOk(selectedSeat);
           api!.success({
             message: "Seat Changed Successfully",
             description: `You have moved to table ${selectedSeat}. Enjoy your meal!`,
             duration: 2.5,
             placement: "top",
           });
+        }
       }}
       onCancel={onCancel}
       styles={{

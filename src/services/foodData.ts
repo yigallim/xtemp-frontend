@@ -140,7 +140,7 @@ export function getFoods(): Food[] {
       name: "Gyokai Shoyu Ramen",
       categoryId: 2,
       description:
-        "Sous Vide Chicken &amp; Pork Charsiu, Bamboo Shoot, Boiled Egg, Onion. Chicken & Fish Soup Base",
+        "Sous Vide Chicken & Pork Charsiu, Bamboo Shoot, Boiled Egg, Onion. Chicken & Fish Soup Base",
       price: 17.5,
       src: "/img/R3.png",
     },
