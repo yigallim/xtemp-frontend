@@ -235,3 +235,19 @@ export function getFoods(): Food[] {
     },
   ];
 }
+
+export function getCustomizationsForFood(food: Food): Customize[] {
+  const foodCategories = getFoodCategories();
+  const customizations = getCustomizations();
+
+  const category = foodCategories.find((category) => category.id === food.categoryId);
+  if (!category || !category.customizeId) {
+    return [];
+  }
+
+  const foodCustomizations = customizations.filter((customize) =>
+    category.customizeId.includes(customize.id)
+  );
+
+  return foodCustomizations;
+}

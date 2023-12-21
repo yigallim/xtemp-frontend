@@ -1,11 +1,31 @@
+.customize-container {
+  background-color: rgb(245, 245, 245) !important;
+  gap: 8px;
+}
 
+.customize-section {
+  border-block: 1px solid rgb(217, 217, 217);
+  background-color: rgb(255, 255, 255);
+}
+.customize-section-title {
+  border-bottom: 1px solid rgb(217, 217, 217);
+  padding: 10px 24px !important;
+}
+.customize-section-body {
+  padding: 14px 24px !important;
+}
+
+#food-hero {
+  background-color: rgb(255, 255, 255);
+  border-block: 1px solid rgb(217, 217, 217);
+}
 
 @media only screen and (max-width: 767px) {
   .customize-section-md {
     padding-inline: 24px !important;
   }
 
-  #food-hero {
+  #food-hero img {
     max-height: 250px;
   }
 
@@ -23,5 +43,16 @@
 }
 
 .customize-base-price {
-    color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+
+
+#return-order {
+  color: rgb(22, 119, 255);
+  display: block;
+  padding: 2px 6px;
+  font-size: 15px;
+  line-height: 1em;
+  margin-top: 0.5em;
+  margin-left: -8px;
 }
