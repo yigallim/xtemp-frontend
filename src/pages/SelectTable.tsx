@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function SelectTable() {
   const [api, contextHolder] = notification.useNotification({
-    stack: { threshold: 2 },
+    stack: { threshold: 1 },
     maxCount: 3,
     top: 16,
   });
@@ -20,7 +20,7 @@ export default function SelectTable() {
     if (getRetailSeats().includes(selectedSeat)) {
       navigate(`/order-${selectedSeat}`);
     } else {
-      api["warning"]({
+      api.warning({
         message: "Warning",
         description: "Please select a proper table number.",
         duration: 2.5,

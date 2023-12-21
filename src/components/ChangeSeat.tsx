@@ -1,7 +1,8 @@
 import { Modal } from "antd";
 import SelectSeatInput from "./SelectSeatInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
+import NotificationContext from "../context/NotificationContext";
 
 type ChangeSeatProps = {
   isOpen: boolean;
@@ -12,6 +13,7 @@ type ChangeSeatProps = {
 export default function ChangeSeat({ isOpen, onOk, onCancel }: ChangeSeatProps) {
   const { seatId } = useParams();
   const [selectedSeat, setSelectedSeat] = useState<string>(seatId?.split("order-")[1]!);
+  const api = useContext(NotificationContext);
 
   return (
     <Modal
@@ -19,6 +21,21 @@ export default function ChangeSeat({ isOpen, onOk, onCancel }: ChangeSeatProps) 
       open={isOpen}
       onOk={() => {
         onOk(selectedSeat);
+        console.log(selectedSeat, seatId);
+        if (seatId?.split("order-")[1]! == selectedSeat)
+          api!.warning({
+            message: "No Change Detected",
+            description: "You've selected your current seat. Please choose a different table.",
+            duration: 3,
+            placement: "top",
+          });
+        else
+          api!.success({
+            message: "Seat Changed Successfully",
+            description: `You have moved to table ${selectedSeat}. Enjoy your meal!`,
+            duration: 2.5,
+            placement: "top",
+          });
       }}
       onCancel={onCancel}
       styles={{

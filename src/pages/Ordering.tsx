@@ -79,6 +79,7 @@ export default function Ordering() {
   const handleOk = (targetSeat: string) => {
     navigate(`/order-${targetSeat}`, { replace: true });
     setIsModalOpen(false);
+    //show notification
   };
 
   const handleCancel = () => {
