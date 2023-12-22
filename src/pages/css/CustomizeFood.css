@@ -46,7 +46,6 @@
   color: var(--primary-color) !important;
 }
 
-
 #return-order {
   color: rgb(22, 119, 255);
   display: block;
@@ -55,4 +54,5 @@
   line-height: 1em;
   margin-top: 0.5em;
   margin-left: -8px;
+  font-weight: 500;
 }

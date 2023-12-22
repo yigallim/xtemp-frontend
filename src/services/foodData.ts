@@ -236,6 +236,11 @@ export function getFoods(): Food[] {
   ];
 }
 
+export function getCategoryForFood(food: Food): FoodCategory | undefined {
+  const foodCategories = getFoodCategories();
+  return foodCategories.find((category) => category.id === food.categoryId);
+}
+
 export function getCustomizationsForFood(food: Food): Customize[] {
   const foodCategories = getFoodCategories();
   const customizations = getCustomizations();

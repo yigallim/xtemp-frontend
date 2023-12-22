@@ -1,11 +1,19 @@
 import { useEffect } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Customize, Food, getCustomizationsForFood, getFoods } from "../services/foodData";
-import { Button, Col, Flex, Radio, Row, Space, Typography } from "antd";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Customize,
+  Food,
+  getCategoryForFood,
+  getCustomizationsForFood,
+  getFoods,
+} from "../services/foodData";
+import { Button, Col, Flex, Radio, Row, Space, Typography, Checkbox } from "antd";
 
 import "./css/CustomizeFood.css";
 import QuantityInput from "../components/QuantityInput";
 import { LeftOutlined } from "@ant-design/icons";
+import TextArea from "antd/es/input/TextArea";
+import Footer from "../components/Footer";
 
 const { Title, Text } = Typography;
 
@@ -17,6 +25,7 @@ export default function CustomizeFood() {
 
   const foodQueryParam = searchParams.get("food");
   const food = foods.find((food) => food.id === foodQueryParam);
+  const foodCategory = getCategoryForFood(food!);
   const customizations: Customize[] = getCustomizationsForFood(food!);
 
   console.log(customizations);
@@ -42,11 +51,12 @@ export default function CustomizeFood() {
               type="text"
               id="return-order"
               onClick={() => {
-                navigate(-1);
+                navigate("/" + seatId);
               }}
             >
               {<LeftOutlined />} Return Ordering
             </Button>
+
             <Flex align="center" justify="space-between">
               <Title level={4} className="customize-base-price" style={{ marginTop: 8 }}>
                 {food?.price.toFixed(2)}
@@ -58,17 +68,40 @@ export default function CustomizeFood() {
       </Row>
       {customizations.map((customization) => (
         <CustomizeSection title={customization.name} key={customization.id}>
-          <Radio.Group>
-            <Space direction="vertical" size={14}>
-              {customization.value.map((_, i) => (
-                <Radio value={i} key={i}>
-                  Option A
-                </Radio>
+          <Radio.Group style={{ width: "100% " }}>
+            <Space direction="vertical" size={14} style={{ width: "100% " }}>
+              {customization.value.map((value, index) => (
+                <Flex key={index}>
+                  <Radio value={index} style={{ flex: "1" }}>
+                    {value.name}
+                  </Radio>
+                  <Text>+ {value.priceDiffer.toFixed(2)}</Text>
+                </Flex>
               ))}
             </Space>
           </Radio.Group>
         </CustomizeSection>
       ))}
+      <CustomizeSection title="Takeaway">
+        <Flex>
+          <Checkbox style={{ userSelect: "none", flex: "1" }}>Takeaway Charge</Checkbox>
+          <Text>+ {foodCategory?.takeawayCharge.toFixed(2)}</Text>
+        </Flex>
+      </CustomizeSection>
+      <CustomizeSection title="Remarks">
+        <TextArea
+          showCount
+          allowClear
+          placeholder="Write something here..."
+          bordered={false}
+          autoSize={{ minRows: 3, maxRows: 5 }}
+          maxLength={100}
+          style={{ marginBottom: "18px" }}
+        />
+      </CustomizeSection>
+      <Footer>
+        a
+      </Footer>
     </div>
   );
 }
@@ -82,7 +115,7 @@ function CustomizeSection({ title, children }: CustomizeSectionProps) {
   return (
     <div className="customize-section">
       <div className="customize-section-title">
-        <Text strong style={{ fontSize: 16, lineHeight: "1em" }}>
+        <Text strong style={{ lineHeight: "1em" }}>
           {title}
         </Text>
       </div>

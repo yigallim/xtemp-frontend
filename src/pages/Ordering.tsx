@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Row, Col, Typography, Anchor, Empty, Input } from "antd";
+import { Row, Col, Typography, Anchor, Empty, Input, Button, Flex } from "antd";
 import { RetailData, getRetailData, getRetailSeats } from "../services/companyData";
 import { Food, getFoods, FoodCategory, getFoodCategories } from "../services/foodData";
 import Footer from "../components/Footer";
 import FoodCategorySection from "./FoodCategorySection";
 import "./css/Ordering.css";
 import ChangeSeat from "../components/ChangeSeat";
+import { SettingOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 
 export default function Ordering() {
@@ -140,7 +141,26 @@ export default function Ordering() {
         )}
       </section>
 
-      <Footer onChangeSeat={showModal} />
+      <Footer>
+        <Button
+          className="seat-button"
+          type="text"
+          icon={<SettingOutlined style={{ fontSize: 20 }} />}
+          onClick={showModal}
+        ></Button>
+        <Flex vertical justify="center" className="table-no">
+          <Text>Table No.</Text>
+          <Text strong>{seatId?.split("order-")[1]!}</Text>
+        </Flex>
+        <Flex className="cart-line" flex={1} align="center" justify="space-between">
+          <Text strong className="cart-price">
+            RM20.00
+          </Text>
+          <span>
+            <ShoppingCartOutlined style={{ fontSize: 20 }} />
+          </span>
+        </Flex>
+      </Footer>
 
       <ChangeSeat isOpen={isModalOpen} onOk={handleOk} onCancel={handleCancel} />
     </div>

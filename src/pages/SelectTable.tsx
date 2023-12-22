@@ -13,7 +13,6 @@ export default function SelectTable() {
   const api = useContext(NotificationContext);
 
   const handleFormSubmit = () => {
-    console.log(selectedSeat);
     if (getRetailSeats().includes(selectedSeat)) {
       navigate(`/order-${selectedSeat}`);
       api!.success({
