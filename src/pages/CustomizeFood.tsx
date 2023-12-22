@@ -11,7 +11,7 @@ import { Button, Col, Flex, Radio, Row, Space, Typography, Checkbox } from "antd
 
 import "./css/CustomizeFood.css";
 import QuantityInput from "../components/QuantityInput";
-import { LeftOutlined } from "@ant-design/icons";
+import { LeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import Footer from "../components/Footer";
 
@@ -100,7 +100,20 @@ export default function CustomizeFood() {
         />
       </CustomizeSection>
       <Footer>
-        a
+        <Flex vertical justify="center" className="table-no">
+          <Text>Total Charges</Text>
+          <Text strong style={{ fontSize: 16 }}>
+            100.10
+          </Text>
+        </Flex>
+        <Flex className="cart-line" flex={1} align="center" justify="space-between">
+          <Text strong className="cart-price">
+            Press To Add To Cart
+          </Text>
+          <span>
+            <ShoppingCartOutlined style={{ fontSize: 20 }} />
+          </span>
+        </Flex>
       </Footer>
     </div>
   );
