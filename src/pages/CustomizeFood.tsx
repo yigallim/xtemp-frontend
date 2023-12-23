@@ -15,6 +15,7 @@ import TakeawaySection from "../components/CustomizeFood/TakeawaySection";
 import RemarksSection from "../components/CustomizeFood/RemarksSection";
 import FooterSection from "../components/CustomizeFood/FooterSection";
 import "./css/CustomizeFood.css";
+import { calculateFoodEntryPrice } from "../services/foodEntryServices";
 
 const { Text } = Typography;
 
@@ -23,7 +24,7 @@ type CustomizeEntry = {
   value: string;
 };
 
-type FoodEntry = {
+export type FoodEntry = {
   foodId: string;
   quantity: number;
   customization: CustomizeEntry[];
@@ -127,7 +128,7 @@ export default function CustomizeFood() {
       <TakeawaySection foodCategory={foodCategory!} handleTakeawayChange={handleTakeawayChange} />
       <RemarksSection handleRemarksChange={handleRemarksChange} />
 
-      <FooterSection />
+      <FooterSection price={calculateFoodEntryPrice(foodEntry)}/>
     </div>
   );
 }

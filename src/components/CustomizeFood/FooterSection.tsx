@@ -5,13 +5,17 @@ import { Flex, Typography } from "antd";
 
 const { Text } = Typography;
 
-export default memo(function FooterSection() {
+type FooterSection = {
+  price: number;
+};
+
+export default memo(function FooterSection({ price }: FooterSection) {
   return (
     <Footer>
       <Flex vertical justify="center" className="table-no">
         <Text>Total Charges</Text>
         <Text strong style={{ fontSize: 16 }}>
-          100.10
+          {price.toFixed(2)}
         </Text>
       </Flex>
       <Flex className="cart-line" flex={1} align="center" justify="space-between">
