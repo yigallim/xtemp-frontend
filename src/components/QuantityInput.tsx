@@ -3,22 +3,35 @@ import { Button, InputNumber } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import "./css/QuantityInput.css";
 
-export default function QuantityInput() {
+type QuantityInputProps = {
+  onChange: (quantity: number) => void;
+};
+
+export default function QuantityInput({ onChange }: QuantityInputProps) {
   const [quantity, setQuantity] = useState(1);
 
   const onQuantityChange = (value: number | string | null) => {
     const newValue = Number(value);
     if (!isNaN(newValue) && newValue >= 1 && newValue <= 99) {
       setQuantity(newValue);
+      onChange(newValue);
     }
   };
 
   const decrement = () => {
-    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+    setQuantity((prevQuantity) => {
+      const newValue = Math.max(prevQuantity - 1, 1);
+      onChange(newValue);
+      return newValue;
+    });
   };
 
   const increment = () => {
-    setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 99));
+    setQuantity((prevQuantity) => {
+      const newValue = Math.min(prevQuantity + 1, 99);
+      onChange(newValue);
+      return newValue;
+    });
   };
 
   return (

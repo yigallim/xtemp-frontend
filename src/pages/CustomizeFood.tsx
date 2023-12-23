@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Customize,
@@ -7,15 +7,29 @@ import {
   getCustomizationsForFood,
   getFoods,
 } from "../services/foodData";
-import { Button, Col, Flex, Radio, Row, Space, Typography, Checkbox } from "antd";
-
+import { Flex, Radio, Space, Typography } from "antd";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
+import FoodInfo from "../components/CustomizeFood/FoodInfo";
+import CustomizeSection from "../components/CustomizeFood/CustomizeSection";
+import TakeawaySection from "../components/CustomizeFood/TakeawaySection";
+import RemarksSection from "../components/CustomizeFood/RemarksSection";
+import FooterSection from "../components/CustomizeFood/FooterSection";
 import "./css/CustomizeFood.css";
-import QuantityInput from "../components/QuantityInput";
-import { LeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import TextArea from "antd/es/input/TextArea";
-import Footer from "../components/Footer";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
+
+type CustomizeEntry = {
+  id: number;
+  value: string;
+};
+
+type FoodEntry = {
+  foodId: string;
+  quantity: number;
+  customization: CustomizeEntry[];
+  isTakeaway: boolean;
+  remarks: string;
+};
 
 export default function CustomizeFood() {
   const { seatId } = useParams();
@@ -24,11 +38,61 @@ export default function CustomizeFood() {
   const foods: Food[] = getFoods();
 
   const foodQueryParam = searchParams.get("food");
-  const food = foods.find((food) => food.id === foodQueryParam);
-  const foodCategory = getCategoryForFood(food!);
+  const food = useMemo(() => foods.find((food) => food.id === foodQueryParam), []);
+  const foodCategory = useMemo(() => getCategoryForFood(food!), []);
   const customizations: Customize[] = getCustomizationsForFood(food!);
 
-  console.log(customizations);
+  const defaultCustomizationValues = useMemo(() => {
+    return customizations.reduce<CustomizeEntry[]>((acc, current) => {
+      if (current.value.length > 0) {
+        acc.push({ id: current.id, value: current.value[0].name });
+      }
+      return acc;
+    }, []);
+  }, [customizations]);
+
+  const handleCustomizationChange = useCallback(
+    (customizationId: number, selectedValue: string) => {
+      console.log(customizationId, selectedValue);
+      setFoodEntry((prev) => {
+        const updatedCustomization = [...prev.customization];
+        const customizationIndex = updatedCustomization.findIndex((c) => c.id === customizationId);
+        if (customizationIndex >= 0) {
+          updatedCustomization[customizationIndex] = {
+            ...updatedCustomization[customizationIndex],
+            value: selectedValue,
+          };
+        } else {
+          updatedCustomization.push({ id: customizationId, value: selectedValue });
+        }
+        return { ...prev, customization: updatedCustomization };
+      });
+    },
+    []
+  );
+
+  const [foodEntry, setFoodEntry] = useState<FoodEntry>({
+    foodId: food!.id,
+    quantity: 1,
+    customization: defaultCustomizationValues,
+    isTakeaway: false,
+    remarks: "",
+  });
+
+  const handleQuantityChange = useCallback((quantity: number) => {
+    setFoodEntry((prev) => ({ ...prev, quantity }));
+  }, []);
+
+  const handleTakeawayChange = useCallback((e: CheckboxChangeEvent) => {
+    setFoodEntry((prev) => ({ ...prev, isTakeaway: e.target.checked }));
+  }, []);
+
+  const handleRemarksChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFoodEntry((prev) => ({ ...prev, remarks: e.target.value }));
+  }, []);
+
+  console.log(foodEntry);
+
   useEffect(() => {
     if (!food) {
       navigate("/not-found", { replace: true });
@@ -37,42 +101,19 @@ export default function CustomizeFood() {
 
   return (
     <div className="container flex-container customize-container">
-      <Row gutter={24} id="food-hero">
-        <Col xs={24} md={12} id="banner-container">
-          <img id="banner" src={food?.src} alt={food?.name} />
-        </Col>
-        <Col xs={24} md={12} id="food-info" className="customize-section-md">
-          <div className="food-main">
-            <Title level={3} className="food-title">
-              {food?.id}. {food?.name}
-            </Title>
-            <Text className="food-description">{food?.description}</Text>
-            <Button
-              type="text"
-              id="return-order"
-              onClick={() => {
-                navigate("/" + seatId);
-              }}
-            >
-              {<LeftOutlined />} Return Ordering
-            </Button>
+      <FoodInfo food={food!} seatId={seatId!} handleQuantityChange={handleQuantityChange} />
 
-            <Flex align="center" justify="space-between">
-              <Title level={4} className="customize-base-price" style={{ marginTop: 8 }}>
-                {food?.price.toFixed(2)}
-              </Title>
-              <QuantityInput />
-            </Flex>
-          </div>
-        </Col>
-      </Row>
       {customizations.map((customization) => (
         <CustomizeSection title={customization.name} key={customization.id}>
-          <Radio.Group style={{ width: "100% " }}>
+          <Radio.Group
+            defaultValue={foodEntry.customization.find((c) => c.id === customization.id)?.value}
+            style={{ width: "100% " }}
+            onChange={(e) => handleCustomizationChange(customization.id, e.target.value)}
+          >
             <Space direction="vertical" size={14} style={{ width: "100% " }}>
               {customization.value.map((value, index) => (
                 <Flex key={index}>
-                  <Radio value={index} style={{ flex: "1" }}>
+                  <Radio value={value.name} style={{ flex: "1" }}>
                     {value.name}
                   </Radio>
                   <Text>+ {value.priceDiffer.toFixed(2)}</Text>
@@ -82,57 +123,11 @@ export default function CustomizeFood() {
           </Radio.Group>
         </CustomizeSection>
       ))}
-      <CustomizeSection title="Takeaway">
-        <Flex>
-          <Checkbox style={{ userSelect: "none", flex: "1" }}>Takeaway Charge</Checkbox>
-          <Text>+ {foodCategory?.takeawayCharge.toFixed(2)}</Text>
-        </Flex>
-      </CustomizeSection>
-      <CustomizeSection title="Remarks">
-        <TextArea
-          showCount
-          allowClear
-          placeholder="Write something here..."
-          bordered={false}
-          autoSize={{ minRows: 3, maxRows: 5 }}
-          maxLength={100}
-          style={{ marginBottom: "18px" }}
-        />
-      </CustomizeSection>
-      <Footer>
-        <Flex vertical justify="center" className="table-no">
-          <Text>Total Charges</Text>
-          <Text strong style={{ fontSize: 16 }}>
-            100.10
-          </Text>
-        </Flex>
-        <Flex className="cart-line" flex={1} align="center" justify="space-between">
-          <Text strong className="cart-price">
-            Press To Add To Cart
-          </Text>
-          <span>
-            <ShoppingCartOutlined style={{ fontSize: 20 }} />
-          </span>
-        </Flex>
-      </Footer>
-    </div>
-  );
-}
 
-type CustomizeSectionProps = {
-  title: string;
-  children: React.ReactNode;
-};
+      <TakeawaySection foodCategory={foodCategory!} handleTakeawayChange={handleTakeawayChange} />
+      <RemarksSection handleRemarksChange={handleRemarksChange} />
 
-function CustomizeSection({ title, children }: CustomizeSectionProps) {
-  return (
-    <div className="customize-section">
-      <div className="customize-section-title">
-        <Text strong style={{ lineHeight: "1em" }}>
-          {title}
-        </Text>
-      </div>
-      <div className="customize-section-body">{children}</div>
+      <FooterSection />
     </div>
   );
 }
