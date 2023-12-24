@@ -8,6 +8,9 @@ import FoodCategorySection from "./FoodCategorySection";
 import "./css/Ordering.css";
 import ChangeSeat from "../components/ChangeSeat";
 import { SettingOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { FoodEntry } from "./CustomizeFood";
+import { calculateCartPrice } from "../services/foodEntryServices";
 
 const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
@@ -28,6 +31,7 @@ export default function Ordering() {
   const [targetOffset, setTargetOffset] = useState<number>();
   const [filteredFoods, setFilteredFoods] = useState<Food[]>(foods);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [cart] = useLocalStorage<FoodEntry[]>("cart", []);
 
   useEffect(() => {
     setTargetOffset(topRef.current?.clientHeight);
@@ -153,7 +157,7 @@ export default function Ordering() {
         </Flex>
         <Flex className="cart-line" flex={1} align="center" justify="space-between">
           <Text strong className="cart-price">
-            RM20.00
+            RM{calculateCartPrice(cart).toFixed(2)}
           </Text>
           <span>
             <ShoppingCartOutlined style={{ fontSize: 20 }} />

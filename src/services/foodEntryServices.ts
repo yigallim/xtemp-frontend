@@ -73,11 +73,18 @@ export function isEqual(entry1: FoodEntry, entry2: FoodEntry): boolean {
   const sortedCustomization2 = [...entry2.customization].sort((a, b) => a.id - b.id);
 
   for (let i = 0; i < sortedCustomization1.length; i++) {
-    if (sortedCustomization1[i].id !== sortedCustomization2[i].id || sortedCustomization1[i].value !== sortedCustomization2[i].value) {
+    if (
+      sortedCustomization1[i].id !== sortedCustomization2[i].id ||
+      sortedCustomization1[i].value !== sortedCustomization2[i].value
+    ) {
       return false;
     }
   }
-
-  // All relevant fields are equal
   return true;
+}
+
+export function calculateCartPrice(cart: FoodEntry[]): number {
+  return cart.reduce((totalPrice, foodEntry) => {
+    return totalPrice + calculateFoodEntryPrice(foodEntry);
+  }, 0);
 }
