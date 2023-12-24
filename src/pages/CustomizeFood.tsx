@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Food } from "../services/foodData";
 import { Flex, Radio, Space, Typography } from "antd";
@@ -9,8 +9,9 @@ import TakeawaySection from "../components/CustomizeFood/TakeawaySection";
 import RemarksSection from "../components/CustomizeFood/RemarksSection";
 import FooterSection from "../components/CustomizeFood/FooterSection";
 import "./css/CustomizeFood.css";
-import { calculateFoodEntryPrice } from "../services/foodEntryServices";
+import { calculateFoodEntryPrice, foodEntryIsValid } from "../services/foodEntryServices";
 import { getCategory, getCustomizationsForFood, getFood } from "../services/foodDataServices";
+import NotificationContext from "../context/NotificationContext";
 
 const { Text } = Typography;
 
@@ -31,6 +32,7 @@ export default function CustomizeFood() {
   const { seatId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const api = useContext(NotificationContext);
   const foodId = searchParams.get("food");
   const food: Food | undefined = getFood(foodId!);
 
@@ -51,6 +53,25 @@ export default function CustomizeFood() {
       return acc;
     }, []);
   }, [customizations]);
+
+  const handleAddCart = () => {
+    if (foodEntryIsValid(foodEntry)) {
+      navigate("/" + seatId);
+      api?.success({
+        message: "Food Added To Cart",
+        description: `You have added ${food?.name} to cart successfully!`,
+        duration: 2.5,
+        placement: "top",
+      });
+    } else {
+      api?.error({
+        message: "Food Not Added To Cart",
+        description: `There is some error due to false data modifications!`,
+        duration: 2.5,
+        placement: "top",
+      });
+    }
+  };
 
   const handleCustomizationChange = useCallback(
     (customizationId: number, selectedValue: string) => {
@@ -122,7 +143,7 @@ export default function CustomizeFood() {
       <TakeawaySection foodCategory={foodCategory!} handleTakeawayChange={handleTakeawayChange} />
       <RemarksSection handleRemarksChange={handleRemarksChange} />
 
-      <FooterSection price={calculateFoodEntryPrice(foodEntry)} />
+      <FooterSection price={calculateFoodEntryPrice(foodEntry)} onAddCart={handleAddCart} />
     </div>
   );
 }

@@ -7,9 +7,10 @@ const { Text } = Typography;
 
 type FooterSection = {
   price: number;
+  onAddCart: () => void;
 };
 
-export default memo(function FooterSection({ price }: FooterSection) {
+export default memo(function FooterSection({ price, onAddCart }: FooterSection) {
   return (
     <Footer>
       <Flex vertical justify="center" className="table-no">
@@ -18,7 +19,13 @@ export default memo(function FooterSection({ price }: FooterSection) {
           {price.toFixed(2)}
         </Text>
       </Flex>
-      <Flex className="cart-line" flex={1} align="center" justify="space-between">
+      <Flex
+        className="cart-line"
+        flex={1}
+        align="center"
+        justify="space-between"
+        onClick={onAddCart}
+      >
         <Text strong className="cart-price">
           Press To Add To Cart
         </Text>
