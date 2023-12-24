@@ -9,9 +9,10 @@ import TakeawaySection from "../components/CustomizeFood/TakeawaySection";
 import RemarksSection from "../components/CustomizeFood/RemarksSection";
 import FooterSection from "../components/CustomizeFood/FooterSection";
 import "./css/CustomizeFood.css";
-import { calculateFoodEntryPrice, foodEntryIsValid } from "../services/foodEntryServices";
+import { calculateFoodEntryPrice, foodEntryIsValid, isEqual } from "../services/foodEntryServices";
 import { getCategory, getCustomizationsForFood, getFood } from "../services/foodDataServices";
 import NotificationContext from "../context/NotificationContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const { Text } = Typography;
 
@@ -25,7 +26,7 @@ export type FoodEntry = {
   quantity: number;
   customization: CustomizeEntry[];
   isTakeaway: boolean;
-  remarks: string;
+  remarks: string[];
 };
 
 export default function CustomizeFood() {
@@ -35,6 +36,7 @@ export default function CustomizeFood() {
   const api = useContext(NotificationContext);
   const foodId = searchParams.get("food");
   const food: Food | undefined = getFood(foodId!);
+  const [cart, setCart] = useLocalStorage<FoodEntry[]>("cart", []);
 
   useEffect(() => {
     if (food === undefined) {
@@ -54,12 +56,38 @@ export default function CustomizeFood() {
     }, []);
   }, [customizations]);
 
-  const handleAddCart = () => {
+  const handleAddCart = async () => {
     if (foodEntryIsValid(foodEntry)) {
+      const existingEntryIndex = cart.findIndex(
+        (cartEntry) => isEqual(cartEntry, foodEntry) && cartEntry.foodId === foodEntry.foodId
+      );
+
+      if (existingEntryIndex !== -1) {
+        const updatedCart = [...cart];
+        const existingRemarks = updatedCart[existingEntryIndex].remarks;
+        const newRemarks = Array.isArray(foodEntry.remarks)
+          ? foodEntry.remarks
+          : [foodEntry.remarks];
+
+        updatedCart[existingEntryIndex].quantity += foodEntry.quantity;
+        updatedCart[existingEntryIndex].remarks = [...existingRemarks, ...newRemarks].filter(
+          (remark) => remark
+        );
+
+        await setCart(updatedCart);
+      } else {
+        const remarksArray = Array.isArray(foodEntry.remarks)
+          ? foodEntry.remarks
+          : [foodEntry.remarks];
+
+        await setCart([...cart, { ...foodEntry, remarks: remarksArray }]);
+      }
+
       navigate("/" + seatId);
+
       api?.success({
         message: "Food Added To Cart",
-        description: `You have added ${food?.name} to cart successfully!`,
+        description: `You have added ${food?.name} to the cart successfully!`,
         duration: 2.5,
         placement: "top",
       });
@@ -98,7 +126,7 @@ export default function CustomizeFood() {
     quantity: 1,
     customization: defaultCustomizationValues,
     isTakeaway: false,
-    remarks: "",
+    remarks: [],
   });
 
   const handleQuantityChange = useCallback((quantity: number) => {
@@ -110,9 +138,8 @@ export default function CustomizeFood() {
   }, []);
 
   const handleRemarksChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFoodEntry((prev) => ({ ...prev, remarks: e.target.value }));
+    setFoodEntry((prev) => ({ ...prev, remarks: [e.target.value] }));
   }, []);
-
   console.log(foodEntry);
 
   return (

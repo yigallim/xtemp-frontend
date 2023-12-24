@@ -52,3 +52,32 @@ export function calculateFoodEntryPrice(foodEntry: FoodEntry) {
   let totalPrice = (basePrice + customizationCost + takeawayCharge) * foodEntry.quantity;
   return totalPrice;
 }
+
+export function isEqual(entry1: FoodEntry, entry2: FoodEntry): boolean {
+  // Compare foodId
+  if (entry1.foodId !== entry2.foodId) {
+    return false;
+  }
+
+  // Compare isTakeaway
+  if (entry1.isTakeaway !== entry2.isTakeaway) {
+    return false;
+  }
+
+  // Compare customization arrays deeply
+  if (entry1.customization.length !== entry2.customization.length) {
+    return false;
+  }
+
+  const sortedCustomization1 = [...entry1.customization].sort((a, b) => a.id - b.id);
+  const sortedCustomization2 = [...entry2.customization].sort((a, b) => a.id - b.id);
+
+  for (let i = 0; i < sortedCustomization1.length; i++) {
+    if (sortedCustomization1[i].id !== sortedCustomization2[i].id || sortedCustomization1[i].value !== sortedCustomization2[i].value) {
+      return false;
+    }
+  }
+
+  // All relevant fields are equal
+  return true;
+}
