@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import {
-  Customize,
-  Food,
-  getCategoryForFood,
-  getCustomizationsForFood,
-  getFoods,
-} from "../services/foodData";
+import { Food } from "../services/foodData";
 import { Flex, Radio, Space, Typography } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import FoodInfo from "../components/CustomizeFood/FoodInfo";
@@ -16,6 +10,7 @@ import RemarksSection from "../components/CustomizeFood/RemarksSection";
 import FooterSection from "../components/CustomizeFood/FooterSection";
 import "./css/CustomizeFood.css";
 import { calculateFoodEntryPrice } from "../services/foodEntryServices";
+import { getCategory, getCustomizationsForFood, getFood } from "../services/foodDataServices";
 
 const { Text } = Typography;
 
@@ -34,14 +29,19 @@ export type FoodEntry = {
 
 export default function CustomizeFood() {
   const { seatId } = useParams();
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const foods: Food[] = getFoods();
+  const [searchParams] = useSearchParams();
+  const foodId = searchParams.get("food");
+  const food: Food | undefined = getFood(foodId!);
 
-  const foodQueryParam = searchParams.get("food");
-  const food = useMemo(() => foods.find((food) => food.id === foodQueryParam), []);
-  const foodCategory = useMemo(() => getCategoryForFood(food!), []);
-  const customizations: Customize[] = getCustomizationsForFood(food!);
+  useEffect(() => {
+    if (food === undefined) {
+      navigate("/not-found", { replace: true });
+    }
+  }, [food, foodId]);
+
+  const foodCategory = useMemo(() => (food ? getCategory(food.categoryId) : undefined), []);
+  const customizations = useMemo(() => (food ? getCustomizationsForFood(food) : []), []);
 
   const defaultCustomizationValues = useMemo(() => {
     return customizations.reduce<CustomizeEntry[]>((acc, current) => {
@@ -73,7 +73,7 @@ export default function CustomizeFood() {
   );
 
   const [foodEntry, setFoodEntry] = useState<FoodEntry>({
-    foodId: food!.id,
+    foodId: food ? food.id : "",
     quantity: 1,
     customization: defaultCustomizationValues,
     isTakeaway: false,
@@ -93,12 +93,6 @@ export default function CustomizeFood() {
   }, []);
 
   console.log(foodEntry);
-
-  useEffect(() => {
-    if (!food) {
-      navigate("/not-found", { replace: true });
-    }
-  }, [food, navigate]);
 
   return (
     <div className="container flex-container customize-container">
@@ -128,7 +122,7 @@ export default function CustomizeFood() {
       <TakeawaySection foodCategory={foodCategory!} handleTakeawayChange={handleTakeawayChange} />
       <RemarksSection handleRemarksChange={handleRemarksChange} />
 
-      <FooterSection price={calculateFoodEntryPrice(foodEntry)}/>
+      <FooterSection price={calculateFoodEntryPrice(foodEntry)} />
     </div>
   );
 }

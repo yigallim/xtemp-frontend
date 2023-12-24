@@ -236,45 +236,4 @@ export function getFoods(): Food[] {
   ];
 }
 
-export function getFood(id: string): Food {
-  const foods = getFoods();
-  return foods.find((food) => food.id === id)!;
-}
 
-export function getCustomizationPrice(customizationId: number, selectedValueName: string): number {
-  const customizations = getCustomizations();
-  const customization = customizations.find((c) => c.id === customizationId);
-  const selectedValue = customization?.value.find((v) => v.name === selectedValueName);
-
-  return selectedValue?.priceDiffer || 0;
-}
-
-export function getTakeawayCharge(food : Food): number {
-  if (!food) return 0;
-
-  const foodCategories = getFoodCategories();
-  const category = foodCategories.find((c) => c.id === food.categoryId);
-
-  return category?.takeawayCharge || 0;
-}
-
-export function getCategoryForFood(food: Food): FoodCategory | undefined {
-  const foodCategories = getFoodCategories();
-  return foodCategories.find((category) => category.id === food.categoryId);
-}
-
-export function getCustomizationsForFood(food: Food): Customize[] {
-  const foodCategories = getFoodCategories();
-  const customizations = getCustomizations();
-
-  const category = foodCategories.find((category) => category.id === food.categoryId);
-  if (!category || !category.customizeId) {
-    return [];
-  }
-
-  const foodCustomizations = customizations.filter((customize) =>
-    category.customizeId.includes(customize.id)
-  );
-
-  return foodCustomizations;
-}
