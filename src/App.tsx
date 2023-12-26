@@ -4,6 +4,7 @@ import Ordering from "./pages/Ordering";
 import SelectTable from "./pages/SelectTable";
 import CustomizeFood from "./pages/CustomizeFood";
 import NotFound from "./pages/NotFound";
+import Cart from "./pages/Cart";
 import NotificationContext from "./context/NotificationContext";
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/:seatId">
             <Route index element={<Ordering />}></Route>
             <Route path="customize" element={<CustomizeFood />}></Route>
+            <Route path="cart" element={<Cart />}></Route>
           </Route>
           <Route path="/not-found" element={<NotFound />}></Route>
           <Route path="*" element={<Navigate to="/not-found" />}></Route>

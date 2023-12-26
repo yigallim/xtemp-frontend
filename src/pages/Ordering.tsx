@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Row, Col, Typography, Anchor, Empty, Input, Button, Flex } from "antd";
 import { RetailData, getRetailData, getRetailSeats } from "../services/companyData";
 import { Food, getFoods, FoodCategory, getFoodCategories } from "../services/foodData";
@@ -8,8 +8,6 @@ import FoodCategorySection from "./FoodCategorySection";
 import "./css/Ordering.css";
 import ChangeSeat from "../components/ChangeSeat";
 import { SettingOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { FoodEntry } from "./CustomizeFood";
 import { calculateCartPrice } from "../services/foodEntryServices";
 
 const { Title, Paragraph, Text } = Typography;
@@ -31,7 +29,6 @@ export default function Ordering() {
   const [targetOffset, setTargetOffset] = useState<number>();
   const [filteredFoods, setFilteredFoods] = useState<Food[]>(foods);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [cart] = useLocalStorage<FoodEntry[]>("cart", []);
 
   useEffect(() => {
     setTargetOffset(topRef.current?.clientHeight);
@@ -155,14 +152,16 @@ export default function Ordering() {
           <Text>Table No.</Text>
           <Text strong>{seatId?.split("order-")[1]!}</Text>
         </Flex>
-        <Flex className="cart-line" flex={1} align="center" justify="space-between">
-          <Text strong className="cart-price">
-            RM{calculateCartPrice(cart).toFixed(2)}
-          </Text>
-          <span>
-            <ShoppingCartOutlined style={{ fontSize: 20 }} />
-          </span>
-        </Flex>
+        <Link to="cart" style={{ flex: 1 }}>
+          <Flex className="cart-line" align="center" justify="space-between">
+            <Text strong className="cart-price">
+              RM{calculateCartPrice().toFixed(2)}
+            </Text>
+            <span>
+              <ShoppingCartOutlined style={{ fontSize: 20 }} />
+            </span>
+          </Flex>
+        </Link>
       </Footer>
 
       <ChangeSeat isOpen={isModalOpen} onOk={handleOk} onCancel={handleCancel} />

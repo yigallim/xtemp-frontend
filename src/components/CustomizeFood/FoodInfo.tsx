@@ -9,11 +9,10 @@ const { Title, Text } = Typography;
 
 type FoodInfoProps = {
   food: Food;
-  seatId: string;
   handleQuantityChange: (quantity: number) => void;
 };
 
-export default memo(function FoodInfo({ food, seatId, handleQuantityChange }: FoodInfoProps) {
+export default memo(function FoodInfo({ food, handleQuantityChange }: FoodInfoProps) {
   const navigate = useNavigate();
   return (
     <Row gutter={24} id="food-hero">
@@ -30,7 +29,7 @@ export default memo(function FoodInfo({ food, seatId, handleQuantityChange }: Fo
             type="text"
             id="return-order"
             onClick={() => {
-              navigate("/" + seatId);
+              navigate("..");
             }}
           >
             {<LeftOutlined />} Return Ordering

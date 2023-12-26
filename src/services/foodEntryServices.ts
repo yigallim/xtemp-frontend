@@ -1,3 +1,4 @@
+import useLocalStorage from "../hooks/useLocalStorage";
 import { FoodEntry } from "../pages/CustomizeFood";
 import { getCustomizations } from "./foodData";
 import { getCategory, getCustomizationPrice, getFood, getTakeawayCharge } from "./foodDataServices";
@@ -83,8 +84,19 @@ export function isEqual(entry1: FoodEntry, entry2: FoodEntry): boolean {
   return true;
 }
 
-export function calculateCartPrice(cart: FoodEntry[]): number {
-  return cart.reduce((totalPrice, foodEntry) => {
-    return totalPrice + calculateFoodEntryPrice(foodEntry);
+export function calculateCartPrice() {
+  const [cart, setCart] = useLocalStorage<FoodEntry[]>("cart", []);
+
+  // Filter out invalid entries and calculate the total price
+  const validCart = cart.filter(foodEntryIsValid);
+  const totalPrice = validCart.reduce((total, foodEntry) => {
+    return total + calculateFoodEntryPrice(foodEntry);
   }, 0);
+
+  // Update the cart in LocalStorage if any entries were removed
+  if (validCart.length !== cart.length) {
+    setCart(validCart);
+  }
+
+  return totalPrice;
 }

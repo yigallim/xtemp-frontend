@@ -35,7 +35,7 @@ export default function CustomizeFood() {
   const [searchParams] = useSearchParams();
   const api = useContext(NotificationContext);
   const foodId = searchParams.get("food");
-  const food: Food | undefined = getFood(foodId!);
+  const food = useMemo<Food>(() => getFood(foodId!)!, []);
   const [cart, setCart] = useLocalStorage<FoodEntry[]>("cart", []);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function CustomizeFood() {
         await setCart([...cart, { ...foodEntry, remarks: remarksArray }]);
       }
 
-      navigate("/" + seatId);
+      navigate("..");
 
       api?.success({
         message: "Food Added To Cart",
@@ -144,7 +144,7 @@ export default function CustomizeFood() {
 
   return (
     <div className="container flex-container customize-container">
-      <FoodInfo food={food!} seatId={seatId!} handleQuantityChange={handleQuantityChange} />
+      <FoodInfo food={food!} handleQuantityChange={handleQuantityChange} />
 
       {customizations.map((customization) => (
         <CustomizeSection title={customization.name} key={customization.id}>
