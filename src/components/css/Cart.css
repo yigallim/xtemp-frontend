@@ -1,0 +1,27 @@
+.cart-entry {
+  padding: 12px 18px;
+  border-bottom: 0.8px solid rgb(215, 220, 225);
+}
+
+.cart-entry-quantity {
+  height: 32px;
+  width: 32px;
+  border: 0.8px solid rgb(215, 220, 225);
+  border-radius: 4px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.cart-entry-desc {
+  margin-left: 14px;
+  flex: 1;
+}
+
+.secondary-text {
+  color: rgb(106, 111, 115);
+}
+
+.cart-price {
+  font-size: 16px;
+  margin: 0 18px;
+}

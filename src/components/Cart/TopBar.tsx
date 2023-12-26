@@ -2,7 +2,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Flex, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export default function TopBar() {
   const navigate = useNavigate();
@@ -23,9 +23,9 @@ export default function TopBar() {
           icon={<LeftOutlined />}
           style={{ height: 40, width: 40 }}
         />
-        <Title level={4} style={{ margin: 0, textAlign: "center", flex: 1 }}>
+        <Text strong style={{ margin: 0, textAlign: "center", flex: 1 }}>
           <span style={{ transform: "translateX(-28px)", display: "inline-block" }}>CART</span>
-        </Title>
+        </Text>
       </Flex>
       <Flex
         style={{
@@ -42,14 +42,14 @@ export default function TopBar() {
       <Flex
         justify="space-between"
         style={{
-          padding: "4px 18px",
+          padding: "6px 18px",
           borderBottom: "0.8px solid rgb(215, 220, 225)",
         }}
         align="center"
       >
         <Flex vertical>
           <Text>Table 17</Text>
-          <Text type="secondary" style={{ fontSize: 12.5 }}>
+          <Text className="secondary-text" style={{ fontSize: 12.5 }}>
             Ordered 0 Item
           </Text>
         </Flex>

@@ -4,7 +4,8 @@ import { getCustomizations } from "./foodData";
 import { getCategory, getCustomizationPrice, getFood, getTakeawayCharge } from "./foodDataServices";
 
 export function foodEntryIsValid(foodEntry: FoodEntry) {
-  console.log(foodEntry);
+  if (!foodEntry.id) return false;
+
   const food = getFood(foodEntry.foodId);
   if (!food) return false;
 
@@ -40,6 +41,7 @@ export function foodEntryIsValid(foodEntry: FoodEntry) {
 
   return true;
 }
+
 export function calculateFoodEntryPrice(foodEntry: FoodEntry) {
   const food = getFood(foodEntry.foodId)!;
   if (food === undefined) return 0;

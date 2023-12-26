@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Food } from "../services/foodData";
 import { Flex, Radio, Space, Typography } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -13,6 +13,7 @@ import { calculateFoodEntryPrice, foodEntryIsValid, isEqual } from "../services/
 import { getCategory, getCustomizationsForFood, getFood } from "../services/foodDataServices";
 import NotificationContext from "../context/NotificationContext";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { nanoid } from "nanoid";
 
 const { Text } = Typography;
 
@@ -22,6 +23,7 @@ type CustomizeEntry = {
 };
 
 export type FoodEntry = {
+  id: string;
   foodId: string;
   quantity: number;
   customization: CustomizeEntry[];
@@ -30,7 +32,6 @@ export type FoodEntry = {
 };
 
 export default function CustomizeFood() {
-  const { seatId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const api = useContext(NotificationContext);
@@ -103,7 +104,6 @@ export default function CustomizeFood() {
 
   const handleCustomizationChange = useCallback(
     (customizationId: number, selectedValue: string) => {
-      console.log(customizationId, selectedValue);
       setFoodEntry((prev) => {
         const updatedCustomization = [...prev.customization];
         const customizationIndex = updatedCustomization.findIndex((c) => c.id === customizationId);
@@ -122,6 +122,7 @@ export default function CustomizeFood() {
   );
 
   const [foodEntry, setFoodEntry] = useState<FoodEntry>({
+    id: nanoid(),
     foodId: food ? food.id : "",
     quantity: 1,
     customization: defaultCustomizationValues,
@@ -140,6 +141,7 @@ export default function CustomizeFood() {
   const handleRemarksChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFoodEntry((prev) => ({ ...prev, remarks: [e.target.value] }));
   }, []);
+
   console.log(foodEntry);
 
   return (
