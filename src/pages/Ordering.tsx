@@ -9,11 +9,14 @@ import "./css/Ordering.css";
 import ChangeSeat from "../components/ChangeSeat";
 import { SettingOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { calculateCartPrice } from "../services/foodEntryServices";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { FoodEntry } from "./CustomizeFood";
 
 const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 
 export default function Ordering() {
+  const [cart] = useLocalStorage<FoodEntry[]>("cart", []);
   const navigate = useNavigate();
   const { seatId } = useParams();
   const seats = getRetailSeats();
@@ -155,7 +158,7 @@ export default function Ordering() {
         <Link to="cart" style={{ flex: 1 }}>
           <Flex className="cart-line" align="center" justify="space-between">
             <Text strong className="cart-price">
-              RM{calculateCartPrice().toFixed(2)}
+              RM{calculateCartPrice(cart).toFixed(2)}
             </Text>
             <span>
               <ShoppingCartOutlined style={{ fontSize: 20 }} />

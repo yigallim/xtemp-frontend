@@ -86,19 +86,24 @@ export function isEqual(entry1: FoodEntry, entry2: FoodEntry): boolean {
   return true;
 }
 
-export function calculateCartPrice() {
-  const [cart, setCart] = useLocalStorage<FoodEntry[]>("cart", []);
-
+export function calculateCartPrice(cart: FoodEntry[]) {
   // Filter out invalid entries and calculate the total price
   const validCart = cart.filter(foodEntryIsValid);
   const totalPrice = validCart.reduce((total, foodEntry) => {
     return total + calculateFoodEntryPrice(foodEntry);
   }, 0);
 
-  // Update the cart in LocalStorage if any entries were removed
-  if (validCart.length !== cart.length) {
-    setCart(validCart);
-  }
-
   return totalPrice;
+}
+
+export type ExtraCharge = {
+  sst: number;
+  service: number;
+};
+
+export function getExtraCharges(): ExtraCharge {
+  return {
+    sst: 0.06,
+    service: 0.1,
+  };
 }

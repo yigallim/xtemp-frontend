@@ -12,7 +12,7 @@ export default function TopBar() {
   };
 
   return (
-    <>
+    <div style={{ backgroundColor: "rgb(255, 255, 255)" }}>
       <Flex
         align="center"
         style={{ paddingLeft: "8px", borderBottom: "0.8px solid rgb(215, 220, 225)" }}
@@ -58,6 +58,6 @@ export default function TopBar() {
           <RightOutlined />
         </div>
       </Flex>
-    </>
+    </div>
   );
 }
